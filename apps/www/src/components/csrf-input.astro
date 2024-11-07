@@ -1,0 +1,5 @@
+---
+import { generateCsrfToken } from "../server/utils";
+---
+
+<input type="hidden" name="_csrf" value={generateCsrfToken()} />

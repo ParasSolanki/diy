@@ -1,0 +1,67 @@
+---
+import CsrfInput from "../components/csrf-input.astro";
+import Layout from "../layouts/default.astro";
+import { actions } from "astro:actions";
+import { auth } from "../server/auth";
+
+const customer = Astro.locals.customer;
+
+const result = Astro.getActionResult(actions.logout);
+
+if (result && !result.error) {
+  await auth.invalidateSession(Astro.locals.session.id);
+
+  const sessionCookie = auth.createBlankSessionCookie();
+  Astro.cookies.set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+
+  return Astro.redirect("/", 302);
+}
+---
+
+<Layout title="DIY">
+  <header class="flex items-center h-20 px-4">
+    <div class="container mx-auto flex justify-between">
+      <div>
+        <a href="/" class="text-3xl font-bold tracking-tight">DIY</a>
+      </div>
+      <nav class="flex items-center space-x-2">
+        {
+          !customer && (
+            <>
+              <a
+                href="/login"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+              >
+                Login
+              </a>
+              <a
+                href="/signup"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+              >
+                Sign Up
+              </a>
+            </>
+          )
+        }
+
+        {
+          customer && (
+            <form method="post" action={actions.logout}>
+              <CsrfInput />
+              <button
+                type="submit"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+              >
+                Logout
+              </button>
+            </form>
+          )
+        }
+      </nav>
+    </div>
+  </header>
+</Layout>

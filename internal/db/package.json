@@ -1,0 +1,43 @@
+{
+  "name": "@diy/db",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./src/index.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "db:studio": "drizzle-kit studio",
+    "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit pull",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "dotenvx run -- tsx ./src/migrate.ts",
+    "db:seed:init": "dotenvx run -- tsx ./src/seeders/init.ts"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.16.1",
+    "@t3-oss/env-core": "^0.11.1",
+    "drizzle-orm": "^0.34.1",
+    "pg": "^8.13.0",
+    "ulid": "^2.3.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.10",
+    "drizzle-kit": "^0.25.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.5.3"
+  }
+}

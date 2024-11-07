@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "deactivate_at" timestamp;
